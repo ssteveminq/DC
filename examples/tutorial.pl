@@ -5,10 +5,12 @@
 :- use_module(library(lists)). % load list library (prolog)
 
 :- set_options(default). % to enable query propagation replace the line with :- set_options(default),set_query_propagation(true).
+
 %:- set_debug(true).
 
 
 :- initialization(init). % initialize DC
+%:- initialization(time(test_coin(1000))). % initialize DC
 
 % define a discrete random variable (bernoulli)
 coin ~ finite([0.2:true,0.8:false]). % syntax name_variable ~ finite([prob:value,prob:value,...])
