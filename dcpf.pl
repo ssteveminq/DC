@@ -1279,7 +1279,7 @@ step_particle1(Actions,PosEvidence,Constraints,N,Delta) :-
 	retractall(user:timestep(_)),
 	T is Prec+1,
 	assert(user:timestep(T)),
-	%write('timestep '),write(T),nl,
+    write('timestep '),write(T),nl,
 	bb_put(sample_sum,0.0),
 %	retractall(user:action(_)),
 %	forall(member(A,Actions),assert(user:A)),

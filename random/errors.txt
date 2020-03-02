@@ -47,3 +47,4 @@ sampling.cpp:609:17: warning: ‘YAP_Bool pl_multivariateGaussian_cut()’ defin
 sampling.cpp:79:17: warning: ‘YAP_Bool pl_test()’ defined but not used [-Wunused-function]
  static YAP_Bool pl_test(void)
                  ^~~~~~~
+yes

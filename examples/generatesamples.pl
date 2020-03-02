@@ -63,7 +63,14 @@ prod ~ val(P) :=
 
 test :-
 	generate_backward([current(object(1))~=(0,0,0),action(move(1,1,0))],next(object(1)) ~= V,L),
-	writeln(L).
+    writeln(V),
+    writeln(L).
+
+test2 :-
+    %init_particle(500),
+	generate_backward([current(object(1))~=(0,0,0),action(move(1,1,0))],next(object(1)) ~= V,L),
+    writeln(V),
+    writeln(L).
 	
 	
 

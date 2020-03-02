@@ -33,8 +33,7 @@ t1 :- %not okay
 	N=1,
 	init_particle(N),
 	step_particle([],[observation(anchor(anchor1)) ~= a, observation(anchor(anchor2)) ~= a], N, 1),
-	step_particle([],[observation(anchor(anchor1)) ~= r, observation(anchor(anchor3)) ~= a], N, 1),
-	plotdata(N).
+	step_particle([],[observation(anchor(anchor1)) ~= r, observation(anchor(anchor3)) ~= a], N, 1).
 
 t2 :-%behavior okay
 	N=1,

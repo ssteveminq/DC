@@ -101,4 +101,4 @@ test2(N) :-
 
 
 	
-:- initialization(time(test(10000))). % automatically executed
+%:- initialization(time(test1(10000))). % automatically executed

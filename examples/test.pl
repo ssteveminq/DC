@@ -37,10 +37,12 @@ test :-
 	
 	distributionalclause:expandquery5([p(1,4)],Out),
 	writeln(Out),
-	halt,
+	%halt,
 	findall(OutX2,(distributionalclause:executeq(Out,OutX),Out\==OutX,distributionalclause:simplify_query(0,0,OutX,OutX2)),L),
+    writeln(OutX2),
 	writeln(ok1),
 	findall(O,(member(O,L),O\==[false]),L2),
+    writeln(L2),
 	writeln(ok2),
 	distributionalclause:removedup(L2,L3,L2),
 	writeln(ok3),

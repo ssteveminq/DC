@@ -249,10 +249,10 @@ observation(gold):t+1 ~ finite([0.9:true,0.1:false]) :=
 
 test1(N) :-
 	init_particle(N),
-	step_particle([action(null)],[observation(up) ~= wall,observation(right) ~= free],[],N,1),
-	eval_query_particle(current(maze(0,1))~=wall,N,P),
+	dcpf:step_particle([action(null)],[observation(up) ~= wall,observation(right) ~= free],[],N,1),
+	dcpf:eval_query_particle(current(maze(0,1))~=wall,N,P),
 	Error is abs(0.857142857142857-P),
-	step_particle([action(right)],[observation(up) ~= free,observation(right) ~= free],[],N,1),
+	dcpf:step_particle([action(right)],[observation(up) ~= free,observation(right) ~= free],[],N,1),
 	write('absolute error '),writeln(Error).
 /*
 

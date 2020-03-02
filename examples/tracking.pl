@@ -1,8 +1,10 @@
 %%% -*- Mode: Prolog; -*-
 
 :- use_module('../dcpf.pl').
+:- use_module('../distributionalclause.pl').
 :- use_module('../random/sampling.pl').
 :- use_module(library(lists)).
+:- set_options(default),set_inference(backward(lw)).
 
 builtin(checkvalue(_,_)).
 builtin(normalize(_,_)).
@@ -13,7 +15,6 @@ checkvalue(true,1.0).
 checkvalue(false,0.0).
 
 :- set_options(default).
-
 
 builtin(prob(P)).
 builtin(dim(_,_)).
@@ -159,13 +160,14 @@ q(2,A,B,C) :- eval_query_particle_alternative(A,B,C).
 q(3,A,B,C) :- eval_query_particle_alternative2(A,B,C).
 
 
-/*
-example:
-init_particle(1000).
-dcpf:step_particle_aux([],[observation(object(1)) ~= (0.6,1,0)],[],1000,0.200000),plotdata(1000).
-dcpf:step_particle_aux([action(move(1,0.1,0.1))],[],[],1000,0.200000),plotdata(1000).
-dcpf:step_particle_aux([],[observation(object(2)) ~= (0.1,0.2,0)],[],1000,0.200000),plotdata(1000).
-dcpf:step_particle_aux([action(move(2,0.1,0.1))],[],[],1000,0.200000),plotdata(1000).
+%example:
+%init_particle(1000).
+%dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.5,0.5,0.37)],[],1000,0.100000).
+%dcpf:step_particle_aux([],[observation(object(1)) ~= (0.6,1,0)],[],1000,0.200000).
+%dcpf:step_particle_aux([],[observation(object(1)) ~= (0.6,1,0)],[],1000,0.200000).
+%dcpf:step_particle_aux([action(move(1,0.1,0.1))],[],[],1000,0.200000),plotdata(1000).
+%dcpf:step_particle_aux([],[observation(object(2)) ~= (0.1,0.2,0)],[],1000,0.200000),plotdata(1000).
+%dcpf:step_particle_aux([action(move(2,0.1,0.1))],[],[],1000,0.200000),plotdata(1000).
 
 
 
@@ -260,12 +262,9 @@ plan(X,Y,S) :-
 	NS is S-1,
 	plan(NX,NY,NS).
 
-*/
 
 /*
 bestaction(10,10,[observation(object(1)) ~= (0.5,0.5,0)],(AA,BB),500),NX is 0.5+AA,NY is 0.5+BB.
-
-
 
 
 
@@ -313,32 +312,68 @@ averageobject(Particles,Mean) :-
 	Mean is T/Particles.
 	
 search_query(I,Q) :-
-	distributionalclause:proof_query_backward(I,Q).
-	
+    distributionalclause:proof_query_backward(I,Q).
+
 plotdata(N) :-
-	%system("killall -q gnuplot"),
-	dcpf:bb_get(offset,Offset),
-	open('data.txt','write',S),
-	%N2 is round(N/5-1),
-	(
-			between(1,N,Pos),
-			I is Offset+Pos,
-	%		recorded(I,current(position) ~= (RX,RY),_),
-	%		write(S,RX),write(S,' '),write(S,RY),write(S,' 0.7 '),write(S,0),nl(S),
-			search_query(I,current(object(ID)) ~= (X,_,Y,_,Z,_)),
-%			search_query(I,current(orientation(ID)) ~= (RR,PP,YY)),
-			dim(ID,(DX,DY,DZ)),
-			rgbcolor(ID,(Rc,Gc,Bc)),
-			write(S,ID),write(S,' '),
-			write(S,X),write(S,' '),write(S,Y),write(S,' '),write(S,Z),write(S,' '),
-%			write(S,DX),write(S,' '),write(S,DY),write(S,' '),write(S,DZ),write(S,' '),
-%			write(S,RR),write(S,' '),write(S,PP),write(S,' '),write(S,YY),write(S,' '),
-			write(S,Rc),write(S,' '),write(S,Gc),write(S,' '),write(S,Bc),nl(S),
-			fail;
-			true
-	),
-	nl(S),
-	close(S).%,
-	%system("killall -q gnuplot"),
-	%system("gnuplot -persist gnuplot.txt").
+    %system("killall -q gnuplot"),
+    dcpf:bb_get(offset,Offset),
+    open('data.txt','write',S),
+    %N2 is round(N/5-1),
+    (
+        between(1,N,Pos),
+        I is Offset+Pos,
+        %		recorded(I,current(position) ~= (RX,RY),_),
+        %		write(S,RX),write(S,' '),write(S,RY),write(S,' 0.7 '),write(S,0),nl(S),
+        search_query(I,current(object(ID)) ~= (X,_,Y,_,Z,_)),
+        %			search_query(I,current(orientation(ID)) ~= (RR,PP,YY)),
+        dim(ID,(DX,DY,DZ)),
+        rgbcolor(ID,(Rc,Gc,Bc)),
+        write(S,ID),write(S,' '),
+        write(S,X),write(S,' '),write(S,Y),write(S,' '),write(S,Z),write(S,' '),
+        %			write(S,DX),write(S,' '),write(S,DY),write(S,' '),write(S,DZ),write(S,' '),
+        %			write(S,RR),write(S,' '),write(S,PP),write(S,' '),write(S,YY),write(S,' '),
+        write(S,Rc),write(S,' '),write(S,Gc),write(S,' '),write(S,Bc),nl(S),
+        fail;
+        true
+    ),
+    nl(S),
+    close(S).%,
+%system("killall -q gnuplot"),
+%system("gnuplot -persist gnuplot.txt").
+
+
+example:
+init_particle(700).
+dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.5,0.5,0.37)],[],700,0.100000).
+distributionalclause:generate_backward([current(object(1))~=(0.5,0.5,0.37),action(move(0,0,0))],next(object(1)) ~= V,L).
+dcpf:step_particle_aux([],[],[],700,0.100000).
+dcpf:eval_average_particle(Avg1,1,current(reward(1)),700,P).
+%dcpf:step_particle_aux([],[],[],700,0.100000).
+%dcpf:eval_average_particle(Avg2,1,current(reward(1)),700,P).
+%dcpf:step_particle_aux([],[],[],700,0.100000).
+dcpf:eval_average_particle(Avg3,1,current(reward(1)),700,P).
+%distributionalclause:generate_backward([current(object(1))~=(0.5,0.5,0.37),action(move(1,1,0))],next(object(1)) ~= V,L).
+%bb_put(values,V).
+%writeln(L).
+
+
+
+
+%example:
+%init_particle(700).
+%dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.5,0.0,0.37)],[],700,0.400000).
+%dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.1,00,0.37)],[],700,0.400000).
+%dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.5,0.0,0.37)],[],700,0.400000),plotdata(700).
+%dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.1,0.0,0.37)],[],700,0.400000),plotdata(700).
+%dcpf:eval_average_particle(Avg,1,current(reward(1),700,P).
+
+
+
+
+%example:
+%init_particle(1000).
+%dcpf:step_particle_aux([action(move(0,0))],[observation(object(1)) ~= (0.5,0.5,0.37)],[],1000,0.100000).
+%dcpf:step_particle_aux([],[observation(object(1)) ~= (0.6,1,0)],[],1000,0.200000).
+%dcpf:step_particle_aux([],[observation(object(1)) ~= (0.6,1,0)],[],1000,0.200000).
+
 
